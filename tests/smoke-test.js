@@ -14,6 +14,10 @@
         document.getElementById("body").value = 'body';
     };
 
+    function sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    };
+
     function checkEncrypt() {
         document.getElementById("encrypted").click();
     };
@@ -34,7 +38,7 @@
             switchuser('alice');
         };
 
-        it('autocrypts when enabled', function() {
+        it('autocrypts when enabled', async function() {
             switchuser('alice');
             enableAutocrypt();
             composeTo('Bob');
@@ -42,11 +46,12 @@
             switchuser('bob');
             enableAutocrypt();
             composeTo('Alice');
-            window.setTimeout(function() {
-                checkEncrypt();
-                send();
-                assertHasEncryptedEmail();
-            }, 10)
+            // work around a firefox bug that prevents clicking an
+            // element that was just enabled.
+            await sleep(10);
+            checkEncrypt();
+            send();
+            assertHasEncryptedEmail();
         });
     })
 })();
