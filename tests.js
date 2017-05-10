@@ -1,4 +1,4 @@
-Tests = (function () {
+var Tests = (function () {
   var env = {specs: {}, prefix: ''}
   var assertions = 0
   var failures = 0

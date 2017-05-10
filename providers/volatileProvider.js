@@ -1,4 +1,4 @@
-volatileProvider = (function () {
+var volatileProvider = (function () {
   var boxes = {}
 
   function send (msg) {

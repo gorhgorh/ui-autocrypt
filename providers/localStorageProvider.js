@@ -1,5 +1,5 @@
-localStorageProvider = (function () {
-
+/* global localStorage */
+var localStorageProvider = (function () {
   function send (msg) {
     var to = msg.to.toLowerCase()
     var from = msg.from.toLowerCase()

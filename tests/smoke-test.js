@@ -1,3 +1,4 @@
+/* global Tests ui localStorage resetClient switchuser */
 (function () {
   var describe = Tests.describe
 
