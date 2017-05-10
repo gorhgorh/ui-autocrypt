@@ -1,11 +1,10 @@
 localStorageProvider = (function () {
-  var boxes = {}
 
   function send (msg) {
     var to = msg.to.toLowerCase()
     var from = msg.from.toLowerCase()
     storeMail(to, msg)
-    if (to != from) {
+    if (to !== from) {
       storeMail(from, msg)
     };
 

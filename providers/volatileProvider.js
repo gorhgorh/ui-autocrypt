@@ -1,11 +1,11 @@
-volatileTransfer = (function () {
+volatileProvider = (function () {
   var boxes = {}
 
   function send (msg) {
     var outbox = messages(msg.from)
     var inbox = messages(msg.to)
     inbox.push(msg)
-    if (msg.to.toLowerCase() != msg.from.toLowerCase()) {
+    if (msg.to.toLowerCase() !== msg.from.toLowerCase()) {
       outbox.push(msg)
     };
 
@@ -20,7 +20,7 @@ volatileTransfer = (function () {
   };
 
   function messages (name) {
-    if (boxes[name.toLowerCase()] == undefined) {
+    if (boxes[name.toLowerCase()] === undefined) {
       boxes[name.toLowerCase()] = []
     };
     return boxes[name.toLowerCase()]

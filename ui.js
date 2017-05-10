@@ -1,4 +1,4 @@
-/* global getacforpeer user indent replying_to */
+/* global getacforpeer user indent */
 function userInterface () {
   var dom = {}
 
@@ -55,11 +55,11 @@ function userInterface () {
     if (e) {
       e.classList.add('selected')
     }
-    if (choice == 'compose') {
+    if (choice === 'compose') {
       dom['to'].focus()
       updatecompose()
-    } else if (choice == 'list') {
-      populate_list()
+    } else if (choice === 'list') {
+      populateList()
       clearcompose()
     }
   }
@@ -71,39 +71,38 @@ function userInterface () {
     dom['encrypted'].checked = false
   }
 
-  function show_msg (msg) {
+  function showMsg (msg) {
     dom['view-from'].innerText = msg['from']
     dom['view-to'].innerText = msg['to']
     dom['view-subject'].innerText = msg['subject']
     dom['view-date'].innerText = msg['date']
-    dom['view-encrypted'].replaceChild(get_encryption_status_node(msg['encrypted']), dom['view-encrypted'].childNodes[0])
+    dom['view-encrypted'].replaceChild(getEncryptionStatusNode(msg['encrypted']), dom['view-encrypted'].childNodes[0])
     dom['view-body'].innerText = msg['body']
 
-    if (msg['from'] == user) {
+    if (msg['from'] === user) {
       dom['reply'].style.display = 'none'
     } else {
       dom['reply'].style.display = 'inline'
-      dom['reply'].onclick = function () { reply_to_msg(msg) }
+      dom['reply'].onclick = function () { replyToMsg(msg) }
     }
 
     pane('msg-view')
   };
 
-  function reply_to_msg (msg) {
+  function replyToMsg (msg) {
     dom['to'].value = msg['from']
     dom['subject'].value = 'Re: ' + msg['subject']
     dom['body'].value = indent(msg['body'])
-    replying_to = msg
     pane('compose')
     dom['encrypted'].checked = dom['encrypted'].checked || msg['encrypted']
   };
 
-  function populate_list () {
+  function populateList () {
     while (dom['msglist'].hasChildNodes()) { dom['msglist'].removeChild(dom['msglist'].lastChild) }
 
     if (messages.length) {
       for (var x in messages) {
-        dom['msglist'].appendChild(generate_list_entry_from_msg(messages[x]))
+        dom['msglist'].appendChild(generateListEntryFromMsg(messages[x]))
       }
       dom['list-replacement'].style.display = 'none'
       dom['msgtable'].style.display = 'table'
@@ -145,7 +144,7 @@ function userInterface () {
       } else {
         dom['encrypted'].checked = false
         enablecheckbox(dom['encrypted'], false)
-        if (to == '') { dom['explanation'].innerText = 'please choose a recipient' } else { dom['explanation'].innerText = 'If you want to encrypt to ' + to + ', ask ' + to + ' to enable Autocrypt and send you an e-mail' }
+        if (to === '') { dom['explanation'].innerText = 'please choose a recipient' } else { dom['explanation'].innerText = 'If you want to encrypt to ' + to + ', ask ' + to + ' to enable Autocrypt and send you an e-mail' }
       }
     }
   };
@@ -159,9 +158,9 @@ function userInterface () {
     if (encrypted && autocrypt['enabled'] === false) {
       if (confirm('Please only enable Autocrypt on one device.\n\n' +
                         'Are you sure you want to enable Autocrypt on this device?')) {
-        autocrypt_switch(user, true)
+        autocryptSwitch(user, true)
         setupprefs()
-        update_description()
+        updateDescription()
       } else {
         dom['encrypted'].checked = false
         encrypted = false
@@ -180,11 +179,11 @@ function userInterface () {
 
   function more () {
     dom['showmore'].checked = !dom['showmore'].checked
-    update_description()
+    updateDescription()
     return false
   };
 
-  function get_description () {
+  function getDescription () {
     if (!dom['enable'].checked) {
       return 'Autocrypt is disabled on this device.'
     }
@@ -197,8 +196,9 @@ function userInterface () {
     return 'Autocrypt lets your peers choose whether to send you encrypted mail.'
   };
 
-  function autocrypt_preference (p) {
-    if (p == 'yes') {
+  function autocryptPreference (p) {
+    var other
+    if (p === 'yes') {
       other = 'no'
     } else {
       other = 'yes'
@@ -212,13 +212,13 @@ function userInterface () {
     } else {
       delete autocrypt['prefer-encrypted']
     }
-    self_sync_autocrypt_state()
-    update_description()
+    selfSyncAutocryptState()
+    updateDescription()
   };
 
-  function autocrypt_enable () {
-    autocrypt_switch(dom['enable'].checked)
-    update_description()
+  function autocryptEnable () {
+    autocryptSwitch(dom['enable'].checked)
+    updateDescription()
   };
 
   function enablecheckbox (box, enabled) {
@@ -226,7 +226,7 @@ function userInterface () {
     if (enabled) { box.parentElement.classList.remove('disabled') } else { box.parentElement.classList.add('disabled') }
   };
 
-  function update_description () {
+  function updateDescription () {
     var disabled = !dom['enable'].checked
     dom['yes'].disabled = disabled
     dom['no'].disabled = disabled
@@ -246,7 +246,7 @@ function userInterface () {
       dom['no'].parentElement.classList.remove('disabled')
       dom['more'].style.display = 'block'
     }
-    dom['description'].innerText = get_description()
+    dom['description'].innerText = getDescription()
   }
 
   function switchuser (name) {
@@ -256,24 +256,24 @@ function userInterface () {
     setupprefs()
     dom['showmore'].checked = false
     pane('list')
-    update_description()
+    updateDescription()
   };
 
   function setupprefs () {
     dom['enable'].checked = autocrypt['enabled']
-    if (autocrypt['prefer-encrypted'] == undefined) {
+    if (autocrypt['prefer-encrypted'] === undefined) {
       dom['yes'].checked = false
       dom['no'].checked = false
-    } else if (autocrypt['prefer-encrypted'] == true) {
+    } else if (autocrypt['prefer-encrypted'] === true) {
       dom['yes'].checked = true
       dom['no'].checked = false
-    } else if (autocrypt['prefer-encrypted'] == false) {
+    } else if (autocrypt['prefer-encrypted'] === false) {
       dom['yes'].checked = false
       dom['no'].checked = true
     }
   }
 
-  function get_encryption_status_node (encrypted) {
+  function getEncryptionStatusNode (encrypted) {
     var x = document.createElement('span')
     if (encrypted) {
       var sub = document.createElement('span')
@@ -287,15 +287,15 @@ function userInterface () {
     return x
   }
 
-  function generate_list_entry_from_msg (msg) {
+  function generateListEntryFromMsg (msg) {
     var ret = document.createElement('tr')
     ret.classList.add('message')
-    ret.onclick = function () { show_msg(msg) }
+    ret.onclick = function () { showMsg(msg) }
 
     var e = document.createElement('td')
     if (msg['encrypted']) { e.appendChild(img('lock')) }
-    if (msg['to'].toLowerCase() == user) { e.appendChild(img('back')) }
-    if (msg['from'].toLowerCase() == user) { e.appendChild(img('forward')) }
+    if (msg['to'].toLowerCase() === user) { e.appendChild(img('back')) }
+    if (msg['from'].toLowerCase() === user) { e.appendChild(img('forward')) }
     ret.appendChild(e)
 
     var f = document.createElement('td')
@@ -330,11 +330,11 @@ function userInterface () {
   return {
     setup: setup,
     pane: pane,
-    update_description: update_description,
+    updateDescription: updateDescription,
     switchuser: switchuser,
     updatecompose: updatecompose,
-    autocrypt_enable: autocrypt_enable,
-    autocrypt_preference: autocrypt_preference,
+    autocryptEnable: autocryptEnable,
+    autocryptPreference: autocryptPreference,
     clickencrypted: clickencrypted,
     more: more,
     sendmail: sendmail

@@ -8,26 +8,24 @@ var user = 'User'
 // setup during initialization
 var ui = {}
 
-var replying_to
-
-function setup_page () {
+function setupPage () {
   ui = userInterface()
   ui.setup()
 
   switchuser(Object.keys(storage)[0])
   ui.pane('list')
-  ui.update_description()
+  ui.updateDescription()
 };
 
-var autocrypt_switch = function (enabled) {
+var autocryptSwitch = function (enabled) {
   autocrypt['enabled'] = enabled
   if (enabled) {
     if (autocrypt['key'] === undefined) { autocrypt['key'] = String(Math.random()) }
   }
-  self_sync_autocrypt_state()
+  selfSyncAutocryptState()
 }
 
-var self_sync_autocrypt_state = function () {
+var selfSyncAutocryptState = function () {
   if (autocrypt['enabled']) {
     autocrypt['state'][user] = {
       'date': new Date(),
@@ -45,7 +43,7 @@ var changeuser = function () {
   var names = Object.keys(storage)
   var index = -1
   for (var x in names) {
-    if (names[x] == user) {
+    if (names[x] === user) {
       index = x
     }
   }
@@ -63,8 +61,8 @@ var switchuser = function (name) {
 }
 
 var adduser = function (username, color) {
-  lc = username.toLowerCase()
-  if (storage[lc] == undefined) {
+  var lc = username.toLowerCase()
+  if (storage[lc] === undefined) {
     storage[lc] = {
       'name': username,
       'color': color,
@@ -77,7 +75,7 @@ var adduser = function (username, color) {
 }
 
 var autocryptheader = function () {
-  if (autocrypt['enabled'] == false) { return undefined }
+  if (autocrypt['enabled'] === false) { return undefined }
   return { 'key': autocrypt['key'],
     'prefer-encrypted': autocrypt['prefer-encrypted']
   }

@@ -20,13 +20,13 @@ Tests = (function () {
   };
 
   assert.content = function (text, id) {
-    elem = document.getElementById(id)
-    assert(elem.innerText == text,
+    var elem = document.getElementById(id)
+    assert(elem.innerText === text,
                 id + ' should contain "' + text + '".')
   }
 
   assert.selector = function (selector) {
-    elem = document.querySelector(selector)
+    var elem = document.querySelector(selector)
     assert(elem,
                 'Expected to find element matching "' + selector + '".')
   }
@@ -36,7 +36,7 @@ Tests = (function () {
     var setup = this.setup
     var teardown = this.teardown
     var prefix = this.prefix
-    if (arr.length == 0) return
+    if (arr.length === 0) return
     for (let suite of arr) {
       var name = suite[0]
       var desc = suite[1]
