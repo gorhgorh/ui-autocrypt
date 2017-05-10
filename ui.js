@@ -1,4 +1,4 @@
-/* global getacforpeer user indent */
+/* global getacforpeer user indent messages addmail autocrypt autocryptSwitch confirm selfSyncAutocryptState*/
 function userInterface () {
   var dom = {}
 
@@ -318,9 +318,9 @@ function userInterface () {
   }
   function img (what) {
     var index = {
-      'lock': 'file:///usr/share/icons/Tango/16x16/emblems/emblem-readonly.png',
-      'back': 'file:///usr/share/icons/Tango/16x16/actions/back.png',
-      'forward': 'file:///usr/share/icons/Tango/16x16/actions/forward.png'
+      lock: 'assets/images/emblem-readonly.png',
+      back: 'assets/images/back.png',
+      forward: 'assets/images/forward.png'
     }
     var lock = document.createElement('img')
     lock.src = index[what]
