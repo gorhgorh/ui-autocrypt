@@ -25,22 +25,30 @@ Tests = function() {
                 id + ' should contain "' + text + '".' );
     };
 
-    function run() {
+    assert.selector = function(selector) {
+        elem = document.querySelector(selector);
+        assert( elem,
+                'Expected to find element matching "' + selector + '".' );
+    };
+
+    async function run() {
         var arr = Object.entries(this.specs)
         var setup = this.setup;
         var teardown = this.teardown;
         var prefix = this.prefix;
         if (arr.length == 0) return;
-        arr.forEach(function (suite) {
+        for (let suite of arr) {
             var name = suite[0];
             var desc = suite[1];
             var env = {specs: {}, prefix: prefix + '  '};
             log(prefix + name);
             if (setup) setup();
-            desc.bind(env)(describe.bind(env), assert);
-            run.bind(env)();
+            // run the described test if there is one
+            await desc.bind(env)(describe.bind(env), assert);
+            // recurse
+            await run.bind(env)();
             if (teardown) teardown();
-        });
+        };
         return (assertions + ' assertions. ' + failures + ' failures.');
     };
 
@@ -48,9 +56,15 @@ Tests = function() {
         this.specs[context] = fun
     };
 
+    async function runTests() {
+        assertions = 0;
+        failures = 0;
+        console.log(await run.bind(env)());
+    };
+
     return {
         describe: describe.bind(env),
-        run: run.bind(env)
+        run: runTests
     };
 }();
 
