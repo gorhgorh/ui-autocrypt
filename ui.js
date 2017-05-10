@@ -1,3 +1,4 @@
+/* global getacforpeer user indent replying_to */
 function userInterface(){
     var dom = {};
 
@@ -43,13 +44,13 @@ function userInterface(){
     function pane(choice) {
         for (var x in panes) {
             panes[x].style.display = 'none';
-            e = document.getElementById("tab-" + x);
+            var e = document.getElementById("tab-" + x);
             if (e) {
                 e.classList.remove('selected');
             }
         }
         panes[choice].style.display = 'block';
-        n = "tab-" + choice;
+        var n = "tab-" + choice;
         e = document.getElementById(n);
         if (e) {
             e.classList.add('selected');
@@ -61,14 +62,14 @@ function userInterface(){
             populate_list();
             clearcompose();
         }
-    };
+    }
 
     function clearcompose() {
         dom['to'].value = '';
         dom['body'].value = '';
         dom['subject'].value = '';
         dom['encrypted'].checked = false;
-    };
+    }
 
     function show_msg(msg) {
         dom['view-from'].innerText = msg['from'];
@@ -235,7 +236,7 @@ function userInterface(){
     };
 
     function update_description() {
-        disabled = !dom['enable'].checked;
+        var disabled = !dom['enable'].checked;
         dom['yes'].disabled = disabled;
         dom['no'].disabled = disabled;
         if (dom['showmore'].checked) {
@@ -253,9 +254,9 @@ function userInterface(){
             dom['yes'].parentElement.classList.remove('disabled');
             dom['no'].parentElement.classList.remove('disabled');
             dom['more'].style.display = 'block';
-        };
+        }
         dom['description'].innerText = get_description();
-    };
+    }
 
     function switchuser(name) {
         dom['username'].innerText = storage[name]['name'];
@@ -279,7 +280,7 @@ function userInterface(){
             dom['yes'].checked = false;
             dom['no'].checked = true;
         }
-    };
+    }
 
     function get_encryption_status_node(encrypted) {
         var x = document.createElement('span');
@@ -293,7 +294,7 @@ function userInterface(){
         }
 
         return x;
-    };
+    }
 
     function generate_list_entry_from_msg(msg) {
         var ret = document.createElement('tr');
@@ -326,17 +327,17 @@ function userInterface(){
         ret.appendChild(d);
 
         return ret;
-    };
+    }
     function img(what) {
         var index = {
             'lock': 'file:///usr/share/icons/Tango/16x16/emblems/emblem-readonly.png',
             'back': 'file:///usr/share/icons/Tango/16x16/actions/back.png',
             'forward': 'file:///usr/share/icons/Tango/16x16/actions/forward.png'
-      };
+        };
         var lock = document.createElement('img');
         lock.src = index[what];
         return lock;
-    };
+    }
 
     return {
         setup: setup,
@@ -349,5 +350,5 @@ function userInterface(){
         clickencrypted: clickencrypted,
         more: more,
         sendmail: sendmail
-    }
-};
+    };
+}
