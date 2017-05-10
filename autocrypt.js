@@ -1,7 +1,8 @@
-/* globals  localStorageProvider autocrypt storage messages userInterface */
+/* globals  localStorageProvider autocrypt storage messages userInterface VolatileProvider */
 // javascript implementation of essential Autocrypt UI
 
-var provider = localStorageProvider
+var provider = VolatileProvider()
+// var provider = localStorageProvider
 
 var user = 'User'
 

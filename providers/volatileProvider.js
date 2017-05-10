@@ -1,4 +1,5 @@
-var volatileProvider = (function () {
+/* global localStorage */
+var VolatileProvider = function () {
   var boxes = {}
 
   function send (msg) {
@@ -26,8 +27,16 @@ var volatileProvider = (function () {
     return boxes[name.toLowerCase()]
   }
 
+  function storeLocalBox (box, msg) {
+    var arr = messages(box)
+    arr.push(msg)
+    localStorage.setItem(box, JSON.stringify(arr))
+  };
+
   return {
+    boxes: boxes,
     send: send,
-    reload: reload
+    reload: reload,
+    storeLocalBox: storeLocalBox
   }
-}())
+}

@@ -31,6 +31,7 @@ var localStorageProvider = (function () {
 
   function storeMail (box, msg) {
     var arr = messages(box)
+    console.log('storeCalled', box, arr)
     arr.push(msg)
     localStorage.setItem(box, JSON.stringify(arr))
   };
