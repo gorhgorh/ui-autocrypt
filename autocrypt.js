@@ -1,17 +1,18 @@
+/* globals  localStorageProvider autocrypt storage messages */
 // javascript implementation of essential Autocrypt UI
 
-provider = localStorageProvider;
+var provider = localStorageProvider;
 
-user = 'User';
+var user = 'User';
 
 // setup during initialization
-ui = {};
+var ui = {};
 
 
 
-replying_to = undefined;
+var replying_to = undefined;
 
-setup_page = function() {
+function setup_page () {
     ui = userInterface();
     ui.setup();
 
@@ -20,7 +21,7 @@ setup_page = function() {
     ui.update_description();
 };
 
-autocrypt_switch = function(enabled) {
+var autocrypt_switch = function(enabled) {
     autocrypt['enabled'] = enabled;
     if (enabled) {
         if (autocrypt['key'] === undefined)
@@ -29,7 +30,7 @@ autocrypt_switch = function(enabled) {
     self_sync_autocrypt_state();
 };
 
-self_sync_autocrypt_state = function() {
+var self_sync_autocrypt_state = function() {
     if (autocrypt['enabled']) {
         autocrypt['state'][user] = {
             'date': new Date(),
@@ -44,20 +45,20 @@ self_sync_autocrypt_state = function() {
 };
 
 
-changeuser = function() {
-    names = Object.keys(storage);
-    index = -1;
+var changeuser = function() {
+    var names = Object.keys(storage);
+    var index = -1;
     for (var x in names) {
         if (names[x] == user) {
             index = x;
         }
     }
-    newindex = (Number(index) + 1) % (names.length);
+    var newindex = (Number(index) + 1) % (names.length);
     switchuser(names[newindex]);
     return false;
 };
 
-switchuser = function(name) {
+var switchuser = function(name) {
     user = name;
     autocrypt = storage[name]['autocrypt']
     messages = [];
@@ -65,7 +66,7 @@ switchuser = function(name) {
     ui.switchuser(name)
 };
 
-adduser = function(username, color) {
+var adduser = function(username, color) {
     lc = username.toLowerCase();
     if (storage[lc] == undefined) {
         storage[lc] = {
@@ -79,7 +80,7 @@ adduser = function(username, color) {
     }
 };
 
-autocryptheader = function() {
+var autocryptheader = function() {
     if (autocrypt['enabled'] == false)
         return undefined;
     return { 'key': autocrypt['key'],
@@ -87,11 +88,11 @@ autocryptheader = function() {
            };
 };
 
-indent = function(str) {
+var indent = function(str) {
     return str.split('\n').map(function(y) { return "> " + y; }).join('\n');
 };
 
-addmail = function(to, subj, body, encrypted) {
+var addmail = function(to, subj, body, encrypted) {
     var msg = { 'from': storage[user]['name'],
             'to': to,
             'subject': subj,
@@ -109,7 +110,7 @@ provider.receive = function(msg) {
     messages.push(msg);
 };
 
-getacforpeer = function(peer) {
+var getacforpeer = function(peer) {
     var ac = autocrypt['state'][peer.toLowerCase()];
 
     if (ac === undefined)
@@ -117,7 +118,7 @@ getacforpeer = function(peer) {
     return ac;
 };
 
-acupdate = function(msg) {
+var acupdate = function(msg) {
     var peer = msg['from'];
     var ac = getacforpeer(peer);
     var newac = {
@@ -127,13 +128,13 @@ acupdate = function(msg) {
     } else {
         newac['prefer-encrypted'] = msg['autocrypt']['prefer-encrypted'];
         newac['key'] =  msg['autocrypt']['key'];
-    };
+    }
     if (ac['date'].getTime() < newac['date'].getTime()) {
         autocrypt['state'][peer.toLowerCase()] = newac;
     }
 };
 
-function resetClient() {
+function resetClient () {
     // client state for all clients is stored here:
     storage = {};
 
