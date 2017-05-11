@@ -1,12 +1,12 @@
-/* global localStorage io provider user*/
-console.log(window.location.href, '3')
+/* global localStorage io provider user */
+console.log(window.location.href, '4')
 var socket = io(window.location.href)
 socket.on('connect', function () {
   console.log('connected as', socket.id)
   // TODO make a proper init so we dont need to override funcs
   provider.sendToIo = function (msgs) {
-    console.log('updated')
-    socket.emit('msgs', msgs)
+    console.log(msgs)
+    socket.emit('message:send', msgs)
   }
   provider.getBox = function (usr) {
     socket.emit('messages:get', usr)
@@ -28,7 +28,7 @@ var VolatileProvider = function () {
       outbox.push(msg)
     };
 
-    provider.sendToIo({user: user, inbox: inbox, outbox: outbox})
+    provider.sendToIo(msg)
     this.receive(msg)
     return true
   };
@@ -62,3 +62,4 @@ var VolatileProvider = function () {
     getBox: getBox
   }
 }
+

@@ -12,11 +12,9 @@ simple socket.io server to simulate a mail server for autocrypt demo
 
 ## use
 
-a basic client is available, the server gives the url once started
+a basic hack on current autocrypt ui is available, the server gives the url once started
 
 ## to do
-- [x]implement replication of message to the recipent
-- write tests
-- merge with current ui
+- better integration
 - stats
 - switch from static json files to levelDb

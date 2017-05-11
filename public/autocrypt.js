@@ -1,4 +1,4 @@
-/* globals  localStorageProvider autocrypt storage messages userInterface VolatileProvider */
+/* globals storage messages userInterface VolatileProvider */
 // javascript implementation of essential Autocrypt UI
 
 var provider = VolatileProvider()
@@ -8,13 +8,16 @@ var user = 'User'
 
 // setup during initialization
 var ui = {}
+var autocrypt = {}
 
 function setupPage () {
   ui = userInterface()
   ui.setup()
-
   switchuser(Object.keys(storage)[0])
   ui.pane('list')
+  if (provider.getMsg) {
+    console.log('yooo')
+  }
   ui.updateDescription()
 };
 
@@ -121,7 +124,7 @@ var acupdate = function (msg) {
   if (msg.autocrypt === undefined) {
     // TODO remove
   } else {
-    newac.preferEncrypted = msg['autocrypt']['preferEncrypted']
+    newac.preferEncrypted = msg.autocrypt.preferEncrypted
     newac.key = msg['autocrypt']['key']
   }
   if (ac.date.getTime() < newac.date.getTime()) {
