@@ -1,4 +1,7 @@
 {
   "verbose": false,
-  "ignore": ["public/*"]
+  "ignore": [
+    "./public/*",
+    "./msgs"
+  ]
 }
