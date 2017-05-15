@@ -1,5 +1,5 @@
-/* global getacforpeer user indent messages addmail autocrypt autocryptSwitch confirm selfSyncAutocryptState storage */
-console.log('ui v0.0.5')
+/* global messages addmail confirm client user us */
+console.log('ui v0.0.6')
 
 function userInterface () {
   var dom = {}
@@ -80,8 +80,9 @@ function userInterface () {
     dom.viewDate.innerText = msg['date']
     dom.viewEncrypted.replaceChild(getEncryptionStatusNode(msg.encrypted), dom.viewEncrypted.childNodes[0])
     dom.viewBody.innerText = msg['body']
-
-    if (msg.from === user) {
+    // fix before refactor
+    var usr = us.current()
+    if (msg.from === usr.name) {
       dom.reply.style.display = 'none'
     } else {
       dom.reply.style.display = 'inline'
@@ -92,6 +93,10 @@ function userInterface () {
   }
 
   function replyToMsg (msg) {
+    function indent (str) {
+      return str.split('\n').map(function (y) { return '> ' + y }).join('\n')
+    }
+
     dom.to.value = msg.from
     dom.subject.value = 'Re: ' + msg.subject
     dom.body.value = indent(msg.body)
@@ -126,9 +131,9 @@ function userInterface () {
 
   function updatecompose () {
     var to = dom.to.value
-    var ac = getacforpeer(to)
+    var ac = client.getPeerAc(to)
 
-    if (!autocrypt['enabled']) {
+    if (!client.isEnabled()) {
       if (ac.preferEncrypted) {
         dom.encryptedRow.style.display = 'table-row'
         dom.encrypted.checked = false
@@ -153,14 +158,14 @@ function userInterface () {
 
   function clickencrypted () {
     var to = dom.to.value
-    var ac = getacforpeer(to)
+    var ac = client.getPeerAc(to)
     var encrypted = dom.encrypted.checked
 
     // FIXME: if autocrypt is disabled and we've set encrypt, prompt the user about it.
-    if (encrypted && autocrypt.enabled === false) {
+    if (encrypted && client.isEnabled === false) {
       if (confirm('Please only enable Autocrypt on one device.\n\n' +
           'Are you sure you want to enable Autocrypt on this device?')) {
-        autocryptSwitch(user, true)
+        client.enable(true)
         setupprefs()
         updateDescription()
       } else {
@@ -168,7 +173,7 @@ function userInterface () {
         encrypted = false
       }
     }
-    if (!autocrypt.enabled && !dom.encrypted.disabled) {
+    if (!client.isEnabled && !dom.encrypted.disabled) {
       dom.explanation.innerText = 'enable Autocrypt to encrypt'
     } else if (encrypted && ac.preferEncrypted === false) {
       dom.explanation.innerText = to + ' prefers to receive unencrypted mail.  It might be hard for them to read.'
@@ -208,19 +213,19 @@ function userInterface () {
     }
     dom[other].checked = false
     if (dom.yes.checked) {
-      autocrypt.preferEncrypted = true
+      client.autocrypt.preferEncrypted = true
     } else if (dom.no.checked) {
-      autocrypt.preferEncrypted = false
+      client.autocrypt.preferEncrypted = false
     } else {
-      delete autocrypt.preferEncrypted
+      delete client.autocrypt.preferEncrypted
     }
-    console.log('prefer encrypted set to:', autocrypt.preferEncrypted)
-    selfSyncAutocryptState()
+    console.log('prefer encrypted set to:', client.autocrypt.preferEncrypted)
+    client.selfSyncAutocryptState()
     updateDescription()
   }
 
   function autocryptEnable () {
-    autocryptSwitch(dom.enable.checked)
+    client.enable(dom.enable.checked)
     updateDescription()
   }
 
@@ -252,10 +257,10 @@ function userInterface () {
     dom.description.innerText = getDescription()
   }
 
-  function switchuser (name) {
-    dom.username.innerText = storage[name]['name']
-    dom.username.style.color = storage[name]['color']
-    dom.from.innerText = storage[name]['name']
+  function switchuser (user) {
+    dom.username.innerText = user.name
+    dom.username.style.color = user.color
+    dom.from.innerText = user.name
     setupprefs()
     dom.showmore.checked = false
     pane('list')
@@ -263,14 +268,14 @@ function userInterface () {
   }
 
   function setupprefs () {
-    dom.enable.checked = autocrypt.enabled
-    if (autocrypt.preferEncrypted === undefined) {
+    dom.enable.checked = client.isEnabled()
+    if (client.autocrypt.preferEncrypted === undefined) {
       dom.yes.checked = false
       dom.no.checked = false
-    } else if (autocrypt.preferEncrypted === true) {
+    } else if (client.autocrypt.preferEncrypted === true) {
       dom.yes.checked = true
       dom.no.checked = false
-    } else if (autocrypt.preferEncrypted === false) {
+    } else if (client.autocrypt.preferEncrypted === false) {
       dom.yes.checked = false
       dom.no.checked = true
     }
@@ -297,8 +302,12 @@ function userInterface () {
 
     var e = document.createElement('td')
     if (msg['encrypted']) { e.appendChild(img('lock')) }
-    if (msg['to'].toLowerCase() === user) { e.appendChild(img('back')) }
-    if (msg['from'].toLowerCase() === user) { e.appendChild(img('forward')) }
+    if (msg['to'].toLowerCase() === dom.username.innerText.toLowerCase()) {
+      e.appendChild(img('back'))
+    }
+    if (msg['from'].toLowerCase() === dom.username.innerText.toLowerCase()) {
+      e.appendChild(img('forward'))
+    }
     ret.appendChild(e)
 
     var f = document.createElement('td')
