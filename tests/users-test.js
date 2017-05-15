@@ -8,7 +8,7 @@
     var us
 
     this.setup = function () {
-      us = users();
+      us = users()
       us.add('Alice', 'green')
       us.add('Bob', 'darkorange')
     }

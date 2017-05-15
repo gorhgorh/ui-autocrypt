@@ -1,4 +1,4 @@
-/* global getacforpeer messages addmail autocrypt autocryptSwitch confirm selfSyncAutocryptState */
+/* global messages addmail confirm client */
 console.log('ui v0.0.5')
 
 function userInterface () {
@@ -130,9 +130,9 @@ function userInterface () {
 
   function updatecompose () {
     var to = dom.to.value
-    var ac = getacforpeer(to)
+    var ac = client.getPeerAc(to)
 
-    if (!autocrypt['enabled']) {
+    if (!client.isEnabled()) {
       if (ac.preferEncrypted) {
         dom.encryptedRow.style.display = 'table-row'
         dom.encrypted.checked = false
@@ -157,14 +157,14 @@ function userInterface () {
 
   function clickencrypted () {
     var to = dom.to.value
-    var ac = getacforpeer(to)
+    var ac = client.getPeerAc(to)
     var encrypted = dom.encrypted.checked
 
     // FIXME: if autocrypt is disabled and we've set encrypt, prompt the user about it.
-    if (encrypted && autocrypt.enabled === false) {
+    if (encrypted && client.isEnabled === false) {
       if (confirm('Please only enable Autocrypt on one device.\n\n' +
           'Are you sure you want to enable Autocrypt on this device?')) {
-        autocryptSwitch(user, true)
+        client.enable(true)
         setupprefs()
         updateDescription()
       } else {
@@ -172,7 +172,7 @@ function userInterface () {
         encrypted = false
       }
     }
-    if (!autocrypt.enabled && !dom.encrypted.disabled) {
+    if (!client.isEnabled && !dom.encrypted.disabled) {
       dom.explanation.innerText = 'enable Autocrypt to encrypt'
     } else if (encrypted && ac.preferEncrypted === false) {
       dom.explanation.innerText = to + ' prefers to receive unencrypted mail.  It might be hard for them to read.'
@@ -212,19 +212,19 @@ function userInterface () {
     }
     dom[other].checked = false
     if (dom.yes.checked) {
-      autocrypt.preferEncrypted = true
+      client.autocrypt.preferEncrypted = true
     } else if (dom.no.checked) {
-      autocrypt.preferEncrypted = false
+      client.autocrypt.preferEncrypted = false
     } else {
-      delete autocrypt.preferEncrypted
+      delete client.autocrypt.preferEncrypted
     }
-    console.log('prefer encrypted set to:', autocrypt.preferEncrypted)
+    console.log('prefer encrypted set to:', client.autocrypt.preferEncrypted)
     selfSyncAutocryptState()
     updateDescription()
   }
 
   function autocryptEnable () {
-    autocryptSwitch(dom.enable.checked)
+    client.enable(dom.enable.checked)
     updateDescription()
   }
 
@@ -267,14 +267,14 @@ function userInterface () {
   }
 
   function setupprefs () {
-    dom.enable.checked = autocrypt.enabled
-    if (autocrypt.preferEncrypted === undefined) {
+    dom.enable.checked = client.isEnabled()
+    if (client.autocrypt.preferEncrypted === undefined) {
       dom.yes.checked = false
       dom.no.checked = false
-    } else if (autocrypt.preferEncrypted === true) {
+    } else if (client.autocrypt.preferEncrypted === true) {
       dom.yes.checked = true
       dom.no.checked = false
-    } else if (autocrypt.preferEncrypted === false) {
+    } else if (client.autocrypt.preferEncrypted === false) {
       dom.yes.checked = false
       dom.no.checked = true
     }
