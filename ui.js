@@ -1,4 +1,4 @@
-/* global getacforpeer user messages addmail autocrypt autocryptSwitch confirm selfSyncAutocryptState storage */
+/* global getacforpeer messages addmail autocrypt autocryptSwitch confirm selfSyncAutocryptState */
 console.log('ui v0.0.5')
 
 function userInterface () {
@@ -256,10 +256,10 @@ function userInterface () {
     dom.description.innerText = getDescription()
   }
 
-  function switchuser (name) {
-    dom.username.innerText = storage[name]['name']
-    dom.username.style.color = storage[name]['color']
-    dom.from.innerText = storage[name]['name']
+  function switchuser (user) {
+    dom.username.innerText = user.name
+    dom.username.style.color = user.color
+    dom.from.innerText = user.name
     setupprefs()
     dom.showmore.checked = false
     pane('list')
@@ -301,8 +301,12 @@ function userInterface () {
 
     var e = document.createElement('td')
     if (msg['encrypted']) { e.appendChild(img('lock')) }
-    if (msg['to'].toLowerCase() === user) { e.appendChild(img('back')) }
-    if (msg['from'].toLowerCase() === user) { e.appendChild(img('forward')) }
+    if (msg['to'].toLowerCase() === dom.username.innerText.toLowerCase()) {
+      e.appendChild(img('back'))
+    }
+    if (msg['from'].toLowerCase() === dom.username.innerText.toLowerCase()) {
+      e.appendChild(img('forward'))
+    }
     ret.appendChild(e)
 
     var f = document.createElement('td')

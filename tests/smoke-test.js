@@ -1,4 +1,4 @@
-/* global Tests ui localStorage resetClient switchuser */
+/* global Tests ui localStorage resetClient changeUser */
 (function () {
   var describe = Tests.describe
 
@@ -36,15 +36,15 @@
     this.setup = function () {
       localStorage.clear()
       resetClient()
-      switchuser('alice')
+      changeUser('alice')
     }
 
     it('autocrypts when enabled', async function () {
-      switchuser('alice')
+      changeUser('alice')
       enableAutocrypt()
       composeTo('Bob')
       send()
-      switchuser('bob')
+      changeUser('bob')
       enableAutocrypt()
       composeTo('Alice')
             // work around a firefox bug that prevents clicking an

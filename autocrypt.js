@@ -1,18 +1,17 @@
-/* globals  localStorageProvider autocrypt storage messages userInterface */
+/* globals  localStorageProvider autocrypt storage messages userInterface users */
 // javascript implementation of essential Autocrypt UI
 
 var provider = localStorageProvider
 
-var user = 'User'
-
 // setup during initialization
 var ui = {}
+var us
 
 function setupPage () {
   ui = userInterface()
   ui.setup()
 
-  switchuser(Object.keys(storage)[0])
+  changeUser('Alice')
   ui.pane('list')
   ui.updateDescription()
 };
@@ -27,49 +26,43 @@ var autocryptSwitch = function (isEnabled) {
 
 var selfSyncAutocryptState = function () {
   if (autocrypt.enabled) {
-    autocrypt.state[user] = {
+    autocrypt.state[us.current().id] = {
       date: new Date(),
       key: autocrypt.key,
       preferEncrypted: autocrypt.preferEncrypted
     }
   } else {
-    autocrypt['state'][user] = {
+    autocrypt.state[us.current().id] = {
       'date': new Date()
     }
   }
 }
 
-var changeuser = function () {
-  var names = Object.keys(storage)
-  var index = -1
-  for (var x in names) {
-    if (names[x] === user) {
-      index = x
+var changeUser = function (name) {
+  if (name) {
+    us.select(name)
     }
+  else {
+    us.next()
   }
-  var newindex = (Number(index) + 1) % (names.length)
-  switchuser(names[newindex])
+  switchuser(us.current())
   return false
 }
 
-var switchuser = function (name) {
-  user = name
-  autocrypt = storage[name].autocrypt
+var switchuser = function (user) {
+  autocrypt = storage[user.id]
   messages = []
-  provider.reload(name)
-  ui.switchuser(name)
+  provider.reload(user.id)
+  ui.switchuser(user)
 }
 
-var adduser = function (username, color) {
-  var lc = username.toLowerCase()
-  if (storage[lc] === undefined) {
-    storage[lc] = {
-      name: username,
-      color: color,
-      autocrypt: {
-        enabled: false,
-        state: {}
-      }
+var adduser = function (name, color) {
+  us.add(name, color)
+  var id = name.toLowerCase()
+  if (storage[id] === undefined) {
+    storage[id] = {
+      enabled: false,
+      state: {}
     }
   }
 }
@@ -83,7 +76,7 @@ var autocryptheader = function () {
 
 var addmail = function (to, subj, body, encrypted) {
   var msg = {
-    from: storage[user].name,
+    from: us.current().name,
     to: to,
     subject: subj,
     body: body,
@@ -133,6 +126,8 @@ function resetClient () {
 
     // autocrypt state for the current user
   autocrypt = {}
+
+  us = users()
   adduser('Alice', 'green')
   adduser('Bob', 'darkorange')
 };

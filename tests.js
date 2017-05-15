@@ -19,10 +19,20 @@ var Tests = (function () {
     }
   };
 
+  assert.equal = function (expected, observed) {
+    assert(observed === expected,
+        'Expected "' + observed + '" to be "' + expected + '".')
+  }
+
+  assert.notEqual = function (unexpected, observed) {
+    assert(observed !== unexpected,
+        'Expected somethign else than "' + unexpected + '".')
+  }
+
   assert.content = function (text, id) {
     var elem = document.getElementById(id)
     assert(elem.innerText === text,
-                id + ' should contain "' + text + '".')
+        id + ' should contain "' + text + '".')
   }
 
   assert.selector = function (selector) {
