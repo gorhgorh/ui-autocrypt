@@ -81,10 +81,6 @@ var autocryptheader = function () {
   }
 }
 
-var indent = function (str) {
-  return str.split('\n').map(function (y) { return '> ' + y }).join('\n')
-}
-
 var addmail = function (to, subj, body, encrypted) {
   var msg = {
     from: storage[user].name,

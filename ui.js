@@ -1,4 +1,4 @@
-/* global getacforpeer user indent messages addmail autocrypt autocryptSwitch confirm selfSyncAutocryptState storage */
+/* global getacforpeer user messages addmail autocrypt autocryptSwitch confirm selfSyncAutocryptState storage */
 console.log('ui v0.0.5')
 
 function userInterface () {
@@ -92,6 +92,10 @@ function userInterface () {
   }
 
   function replyToMsg (msg) {
+    function indent (str) {
+      return str.split('\n').map(function (y) { return '> ' + y }).join('\n')
+    }
+
     dom.to.value = msg.from
     dom.subject.value = 'Re: ' + msg.subject
     dom.body.value = indent(msg.body)
