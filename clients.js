@@ -81,7 +81,8 @@ function clients () {
       makeHeader: makeHeader,
       getPeerAc: getPeerAc,
       enable: enable,
-      isEnabled: isEnabled
+      isEnabled: isEnabled,
+      selfSyncAutocryptState: selfSyncAutocryptState
     }
   }
 

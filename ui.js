@@ -1,5 +1,5 @@
-/* global messages addmail confirm client */
-console.log('ui v0.0.5')
+/* global messages addmail confirm client user us */
+console.log('ui v0.0.6')
 
 function userInterface () {
   var dom = {}
@@ -80,8 +80,9 @@ function userInterface () {
     dom.viewDate.innerText = msg['date']
     dom.viewEncrypted.replaceChild(getEncryptionStatusNode(msg.encrypted), dom.viewEncrypted.childNodes[0])
     dom.viewBody.innerText = msg['body']
-
-    if (msg.from === user) {
+    // fix before refactor
+    var usr = us.current()
+    if (msg.from === usr.name) {
       dom.reply.style.display = 'none'
     } else {
       dom.reply.style.display = 'inline'
@@ -219,7 +220,7 @@ function userInterface () {
       delete client.autocrypt.preferEncrypted
     }
     console.log('prefer encrypted set to:', client.autocrypt.preferEncrypted)
-    selfSyncAutocryptState()
+    client.selfSyncAutocryptState()
     updateDescription()
   }
 

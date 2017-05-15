@@ -1,4 +1,4 @@
-/* globals  localStorageProvider messages userInterface users clients */
+/* globals  localStorageProvider messages userInterface users clients client */
 // javascript implementation of essential Autocrypt UI
 
 var provider = localStorageProvider
@@ -23,8 +23,7 @@ var autocryptSwitch = function (isEnabled) {
 var changeUser = function (name) {
   if (name) {
     us.select(name)
-    }
-  else {
+  } else {
     us.next()
   }
   switchuser(us.current())
