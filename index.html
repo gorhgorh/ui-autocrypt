@@ -9,7 +9,7 @@
         <script type="text/javascript" src="tests/smoke-test.js"></script>
         <link rel="stylesheet" type="text/css" href="ui.css" />
     </head>
-    <body onload="setup_page();">
+    <body onload="setupPage();">
         <div id="menu">
             <ul>
                 <li id="tab-compose" onclick="return ui.pane('compose');">Write mail</li>
@@ -31,7 +31,7 @@
                         <tr><th>From:</th><td id="from"></td></tr>
                         <tr><th>To:</th><td><input onchange="return ui.updatecompose();" id="to" /></td></tr>
                         <tr><th>Subject:</th><td><input id="subject" /></td></tr>
-                        <tr id="encrypted-row"><td colspan="2"><label><input type="checkbox" onclick="return ui.clickencrypted();" id="encrypted">Encrypt</label><span id="explanation"></span></td></tr>
+                        <tr id="encryptedRow"><td colspan="2"><label><input type="checkbox" onclick="return ui.clickencrypted();" id="encrypted">Encrypt</label><span id="explanation"></span></td></tr>
                         <tr><td id="compose-actions" colspan="2">
                                 <input type="button" id="send" onclick="return ui.sendmail();" value="Send"/>
                         </td></tr>
@@ -43,7 +43,7 @@
         </form>
 
         <div id="list">
-            <div id="list-replacement">No messages!</div>
+            <div id="listReplacement">No messages!</div>
             <table id="msgtable">
                 <thead>
                     <th>...</th><th>From</th><th>To</th><th>Subject</th><th>Date</th>
@@ -53,17 +53,17 @@
             </table>
         </div>
 
-        <div id="msg-view">
+        <div id="msgView">
                 <table><tbody>
-                        <tr><th>From:</th><td id="view-from"></td></tr>
-                        <tr><th>To:</th><td id="view-to"></td></tr>
-                        <tr><th>Subject:</th><td id="view-subject"></td></tr>
-                        <tr><th>Date:</th><td id="view-date"></td></tr>
-                        <tr><td colspan="2" id="view-encrypted"><span></span></td></tr>
+                        <tr><th>From:</th><td id="viewFrom"></td></tr>
+                        <tr><th>To:</th><td id="viewTo"></td></tr>
+                        <tr><th>Subject:</th><td id="viewSubject"></td></tr>
+                        <tr><th>Date:</th><td id="viewDate"></td></tr>
+                        <tr><td colspan="2" id="viewEncrypted"><span></span></td></tr>
                         <tr><td id="view-actions" colspan="2">
                                 <input type="button" id="reply" onclick="return false;" value="Reply"/>
                         </td></tr>
-                        <tr><td colspan="2" id="view-body"></td></tr>
+                        <tr><td colspan="2" id="viewBody"></td></tr>
                 </tbody></table>
         </div>
 
@@ -74,7 +74,7 @@
                         <label>[<input type="checkbox"
                                        value="enable"
                                        id="enable"
-                                       onclick="ui.autocrypt_enable();"/>enable]</label>
+                                       onclick="ui.autocryptEnable();"/>enable]</label>
                     </legend>
                     <div>Please enable Autocrypt on <em>only one</em> device. (<a href="#" onclick="return why();">why?</a>)
                     </div>
@@ -82,13 +82,13 @@
                     <div id="more">
                         <a id="showmore" href="#" onclick="return ui.more();">more...</a>
                     </div>
-                    <div id="autocrypt-settings">
+                    <div id="autocryptSettings">
                         <label>
                             <input type="checkbox"
                                    value="yes"
                                    name="prefer"
                                    id="preferyes"
-                                   onclick="ui.autocrypt_preference('yes');"/>
+                                   onclick="ui.autocryptPreference('yes');"/>
                             I prefer to receive encrypted mail.
                         </label>
                         <br/>
@@ -97,7 +97,7 @@
                                    value="yes"
                                    name="prefer"
                                    id="preferno"
-                                   onclick="ui.autocrypt_preference('no');"/>
+                                   onclick="ui.autocryptPreference('no');"/>
                             I prefer not to receive encrypted mail.
                         </label>
                     </div>
