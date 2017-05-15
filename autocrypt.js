@@ -139,7 +139,6 @@ function resetClient () {
   autocrypt = {}
   adduser('Alice', 'green')
   adduser('Bob', 'darkorange')
-  adduser('clarence', 'red')
 };
 
 resetClient()
