@@ -2,36 +2,40 @@
 (function () {
   var describe = Tests.describe
 
+  function click(id) {
+    document.getElementById(id).click()
+  }
+
   function enableAutocrypt () {
-    ui.pane('preferences')
-    document.getElementById('enable').click()
-  };
+    click('tab-preferences')
+    click('enable')
+  }
 
   function composeTo (recipient) {
-    ui.pane('compose')
+    click('tab-compose')
     document.getElementById('to').value = recipient
     document.getElementById('to').onchange()
     document.getElementById('subject').value = 'subject'
     document.getElementById('body').value = 'body'
-  };
+  }
 
   function sleep (ms) {
     return new Promise(resolve => setTimeout(resolve, ms))
-  };
+  }
 
   function checkEncrypt () {
-    document.getElementById('encrypted').click()
-  };
+    click('encrypted')
+  }
 
   function send () {
-    document.getElementById('send').click()
-  };
+    click('send')
+  }
 
   describe('Smoke test', function (it, assert) {
     function assertHasEncryptedEmail () {
-      ui.pane('list')
+      click('tab-list')
       assert.selector('#msgtable img[src*="readonly"]')
-    };
+    }
 
     this.setup = function () {
       localStorage.clear()

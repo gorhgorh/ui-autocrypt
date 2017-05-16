@@ -24,6 +24,15 @@ function userInterface () {
 
     dom.encrypted.parentNode.insertBefore(img('lock'), dom.encrypted)
 
+    for (id of (Object.keys(panes))) {
+      let link = document.getElementById('tab-'+id)
+      if (link) {
+        link.addEventListener('click', function() {
+          return pane(id)
+        }, false)
+      }
+    }
+
     changeUser('Alice')
     pane('list')
     updateDescription()
@@ -330,7 +339,6 @@ function userInterface () {
 
   return {
     setup: setup,
-    pane: pane,
     updateDescription: updateDescription,
     switchuser: switchuser,
     updatecompose: updatecompose,
