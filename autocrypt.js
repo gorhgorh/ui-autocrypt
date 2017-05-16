@@ -37,10 +37,6 @@ var switchuser = function (user) {
   ui.switchuser(user)
 }
 
-var adduser = function (name, color) {
-  us.add(name, color)
-}
-
 var addmail = function (to, subj, body, encrypted) {
   var msg = {
     from: us.current().name,
@@ -65,8 +61,8 @@ function resetClient () {
   messages = []
 
   us = users()
-  adduser('Alice', 'green')
-  adduser('Bob', 'darkorange')
+  us.add('Alice', 'green')
+  us.add('Bob', 'darkorange')
 
   cs = clients()
 };
