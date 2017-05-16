@@ -3,18 +3,8 @@
 
 var provider = localStorageProvider
 
-// setup during initialization
-var ui = {}
-var us
-
-function setupPage () {
-  ui = userInterface()
-  ui.setup()
-
-  changeUser('Alice')
-  ui.pane('list')
-  ui.updateDescription()
-};
+var ui = userInterface()
+var us = users()
 
 var autocryptSwitch = function (isEnabled) {
   client.enable(isEnabled)

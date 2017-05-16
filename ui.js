@@ -3,44 +3,30 @@ console.log('ui v0.0.6')
 
 function userInterface () {
   var dom = {}
-
   var panes = {}
 
-  function setup () {
-    panes = {
-      compose: document.getElementById('compose'),
-      list: document.getElementById('list'),
-      msgView: document.getElementById('msgView'),
-      preferences: document.getElementById('preferences')
+  function getElements() {
+    collection = {}
+    for (id of arguments) {
+      collection[id] = document.getElementById(id)
     }
-    dom = {
-      more: document.getElementById('more'),
-      listReplacement: document.getElementById('listReplacement'),
-      msgtable: document.getElementById('msgtable'),
-      username: document.getElementById('username'),
-      from: document.getElementById('from'),
-      to: document.getElementById('to'),
-      subject: document.getElementById('subject'),
-      body: document.getElementById('body'),
-      msglist: document.getElementById('msglist'),
-      viewFrom: document.getElementById('viewFrom'),
-      viewTo: document.getElementById('viewTo'),
-      viewSubject: document.getElementById('viewSubject'),
-      viewDate: document.getElementById('viewDate'),
-      viewBody: document.getElementById('viewBody'),
-      viewEncrypted: document.getElementById('viewEncrypted'),
-      encrypted: document.getElementById('encrypted'),
-      encryptedRow: document.getElementById('encryptedRow'),
-      showmore: document.getElementById('showmore'),
-      reply: document.getElementById('reply'),
-      yes: document.getElementById('preferyes'),
-      no: document.getElementById('preferno'),
-      enable: document.getElementById('enable'),
-      description: document.getElementById('description'),
-      explanation: document.getElementById('explanation'),
-      settings: document.getElementById('autocryptSettings')
-    }
+    return collection
+  }
+
+  // run when the dom is loaded
+  function setup (event) {
+    panes = getElements('compose', 'list', 'msgView', 'preferences')
+    dom = getElements('more', 'listReplacement', 'msgtable',
+        'username', 'from', 'to', 'subject', 'body', 'msglist',
+        'viewFrom', 'viewTo', 'viewSubject', 'viewDate', 'viewBody', 'viewEncrypted',
+        'encrypted', 'encryptedRow', 'showmore', 'reply', 'yes', 'no', 'enable',
+        'description', 'explanation', 'settings')
+
     dom.encrypted.parentNode.insertBefore(img('lock'), dom.encrypted)
+
+    changeUser('Alice')
+    pane('list')
+    updateDescription()
   }
 
   function pane (choice) {
@@ -339,6 +325,8 @@ function userInterface () {
     lock.src = index[what]
     return lock
   }
+
+  document.addEventListener("DOMContentLoaded", setup)
 
   return {
     setup: setup,
