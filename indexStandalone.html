@@ -1,19 +1,9 @@
 <html>
     <head>
         <title>Autocrypt Essential UI Demo</title>
-        <script type="text/javascript" src="providers/localStorageProvider.js"></script>
-        <script type="text/javascript" src="users.js"></script>
-        <script type="text/javascript" src="ui.js"></script>
-        <script type="text/javascript" src="clients.js"></script>
-        <script type="text/javascript" src="autocrypt.js"></script>
-        <script type="text/javascript" src="tests.js"></script>
-        <script type="text/javascript" src="tests/user-switch-test.js"></script>
-        <script type="text/javascript" src="tests/users-test.js"></script>
-        <script type="text/javascript" src="tests/clients-test.js"></script>
-        <script type="text/javascript" src="tests/smoke-test.js"></script>
         <link rel="stylesheet" type="text/css" href="ui.css" />
     </head>
-    <body onload="setupPage();">
+    <body>
         <div id="menu">
             <ul>
                 <li id="tab-compose" onclick="return ui.pane('compose');">Write mail</li>
@@ -111,5 +101,7 @@
                 </fieldset>
             </div>
         </form>
+        <script type="text/javascript" src="lib/dom.js"></script>
+        <script type="text/javascript" src="index.js"></script>
     </body>
 </html>

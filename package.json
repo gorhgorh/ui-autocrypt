@@ -10,8 +10,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "npm run build",
     "start": "http-server ./",
-    "watch": "watchify index.js -o public/bundle.js",
-    "build": "browserify index.js -o public/bundle.js"
+    "watch": "watchify index.js -d -o bundle.js",
+    "build": "browserify index.js -o bundle.js"
   },
   "repository": {
     "type": "git",
