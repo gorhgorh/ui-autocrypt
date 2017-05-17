@@ -1,7 +1,7 @@
 /* globals  localStorageProvider messages userInterface users clients client cs */
 // javascript implementation of essential Autocrypt UI
 
-var provider = localStorageProvider
+var provider = volatileProvider
 
 var ui = userInterface()
 var us = users()
