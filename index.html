@@ -2,8 +2,9 @@
     <head>
         <title>Autocrypt Essential UI Demo</title>
         <script type="text/javascript" src="providers/localStorageProvider.js"></script>
-        <script type="text/javascript" src="users.js"></script>
+        <script type="text/javascript" src="ui/panes.js"></script>
         <script type="text/javascript" src="ui.js"></script>
+        <script type="text/javascript" src="users.js"></script>
         <script type="text/javascript" src="clients.js"></script>
         <script type="text/javascript" src="autocrypt.js"></script>
         <script type="text/javascript" src="tests.js"></script>
@@ -13,12 +14,12 @@
         <script type="text/javascript" src="tests/smoke-test.js"></script>
         <link rel="stylesheet" type="text/css" href="ui.css" />
     </head>
-    <body onload="setupPage();">
+    <body>
         <div id="menu">
             <ul>
-                <li id="tab-compose" onclick="return ui.pane('compose');">Write mail</li>
-                <li id="tab-list" onclick="return ui.pane('list');">Mailbox</li>
-                <li id="tab-preferences" onclick="return ui.pane('preferences');">Preferences</li>
+                <li id="tab-compose">Write mail</li>
+                <li id="tab-list">Mailbox</li>
+                <li id="tab-preferences">Preferences</li>
             </ul>
             <div id="login-info">
               <div id="menu-username">
@@ -86,12 +87,12 @@
                     <div id="more">
                         <a id="showmore" href="#" onclick="return ui.more();">more...</a>
                     </div>
-                    <div id="autocryptSettings">
+                    <div id="settings">
                         <label>
                             <input type="checkbox"
                                    value="yes"
                                    name="prefer"
-                                   id="preferyes"
+                                   id="yes"
                                    onclick="ui.autocryptPreference('yes');"/>
                             I prefer to receive encrypted mail.
                         </label>
@@ -100,7 +101,7 @@
                             <input type="checkbox"
                                    value="yes"
                                    name="prefer"
-                                   id="preferno"
+                                   id="no"
                                    onclick="ui.autocryptPreference('no');"/>
                             I prefer not to receive encrypted mail.
                         </label>

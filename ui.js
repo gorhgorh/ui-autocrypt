@@ -3,67 +3,40 @@ console.log('ui v0.0.6')
 
 function userInterface () {
   var dom = {}
+  var panes = uiPanes()
 
-  var panes = {}
-
-  function setup () {
-    panes = {
-      compose: document.getElementById('compose'),
-      list: document.getElementById('list'),
-      msgView: document.getElementById('msgView'),
-      preferences: document.getElementById('preferences')
+  function getElements() {
+    collection = {}
+    for (id of arguments) {
+      collection[id] = document.getElementById(id)
     }
-    dom = {
-      more: document.getElementById('more'),
-      listReplacement: document.getElementById('listReplacement'),
-      msgtable: document.getElementById('msgtable'),
-      username: document.getElementById('username'),
-      from: document.getElementById('from'),
-      to: document.getElementById('to'),
-      subject: document.getElementById('subject'),
-      body: document.getElementById('body'),
-      msglist: document.getElementById('msglist'),
-      viewFrom: document.getElementById('viewFrom'),
-      viewTo: document.getElementById('viewTo'),
-      viewSubject: document.getElementById('viewSubject'),
-      viewDate: document.getElementById('viewDate'),
-      viewBody: document.getElementById('viewBody'),
-      viewEncrypted: document.getElementById('viewEncrypted'),
-      encrypted: document.getElementById('encrypted'),
-      encryptedRow: document.getElementById('encryptedRow'),
-      showmore: document.getElementById('showmore'),
-      reply: document.getElementById('reply'),
-      yes: document.getElementById('preferyes'),
-      no: document.getElementById('preferno'),
-      enable: document.getElementById('enable'),
-      description: document.getElementById('description'),
-      explanation: document.getElementById('explanation'),
-      settings: document.getElementById('autocryptSettings')
-    }
-    dom.encrypted.parentNode.insertBefore(img('lock'), dom.encrypted)
+    return collection
   }
 
-  function pane (choice) {
-    for (var x in panes) {
-      panes[x].style.display = 'none'
-      var e = document.getElementById('tab-' + x)
-      if (e) {
-        e.classList.remove('selected')
-      }
-    }
-    panes[choice].style.display = 'block'
-    var n = 'tab-' + choice
-    e = document.getElementById(n)
-    if (e) {
-      e.classList.add('selected')
-    }
-    if (choice === 'compose') {
+  // run when the dom is loaded
+  function setup (event) {
+    dom = getElements('more', 'listReplacement', 'msgtable',
+        'username', 'from', 'to', 'subject', 'body', 'msglist',
+        'viewFrom', 'viewTo', 'viewSubject', 'viewDate', 'viewBody', 'viewEncrypted',
+        'encrypted', 'encryptedRow', 'showmore', 'reply', 'yes', 'no', 'enable',
+        'description', 'explanation', 'settings')
+
+    dom.encrypted.parentNode.insertBefore(img('lock'), dom.encrypted)
+
+    panes.setup()
+
+    document.getElementById('compose').addEventListener("selected", function (e) {
       dom.to.focus()
       updatecompose()
-    } else if (choice === 'list') {
+    })
+    document.getElementById('list').addEventListener("selected", function (e) {
       populateList()
       clearcompose()
-    }
+    })
+
+    changeUser('Alice')
+    panes.select('list')
+    updateDescription()
   }
 
   function clearcompose () {
@@ -89,7 +62,7 @@ function userInterface () {
       dom.reply.onclick = function () { replyToMsg(msg) }
     }
 
-    pane('msgView')
+    panes.select('msgView')
   }
 
   function replyToMsg (msg) {
@@ -100,7 +73,7 @@ function userInterface () {
     dom.to.value = msg.from
     dom.subject.value = 'Re: ' + msg.subject
     dom.body.value = indent(msg.body)
-    pane('compose')
+    panes.select('compose')
     dom.encrypted.checked = dom.encrypted.checked || msg.encrypted
   }
 
@@ -122,7 +95,7 @@ function userInterface () {
   function sendmail () {
     if (addmail(dom.to.value, dom.subject.value, dom.body.value, dom.encrypted.checked)) {
       clearcompose()
-      pane('list')
+      panes.select('list')
       return false
     } else {
       return false
@@ -263,7 +236,7 @@ function userInterface () {
     dom.from.innerText = user.name
     setupprefs()
     dom.showmore.checked = false
-    pane('list')
+    panes.select('list')
     updateDescription()
   }
 
@@ -340,9 +313,10 @@ function userInterface () {
     return lock
   }
 
+  document.addEventListener("DOMContentLoaded", setup)
+
   return {
     setup: setup,
-    pane: pane,
     updateDescription: updateDescription,
     switchuser: switchuser,
     updatecompose: updatecompose,
