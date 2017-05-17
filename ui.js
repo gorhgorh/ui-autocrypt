@@ -3,7 +3,7 @@ console.log('ui v0.0.6')
 
 function userInterface () {
   var dom = {}
-  var panes = {}
+  var panes = uiPanes()
 
   function getElements() {
     collection = {}
@@ -15,7 +15,6 @@ function userInterface () {
 
   // run when the dom is loaded
   function setup (event) {
-    panes = getElements('compose', 'list', 'msgView', 'preferences')
     dom = getElements('more', 'listReplacement', 'msgtable',
         'username', 'from', 'to', 'subject', 'body', 'msglist',
         'viewFrom', 'viewTo', 'viewSubject', 'viewDate', 'viewBody', 'viewEncrypted',
@@ -24,41 +23,20 @@ function userInterface () {
 
     dom.encrypted.parentNode.insertBefore(img('lock'), dom.encrypted)
 
-    for (id of (Object.keys(panes))) {
-      let link = document.getElementById('tab-'+id)
-      if (link) {
-        link.addEventListener('click', function() {
-          return pane(id)
-        }, false)
-      }
-    }
+    panes.setup()
 
-    changeUser('Alice')
-    pane('list')
-    updateDescription()
-  }
-
-  function pane (choice) {
-    for (var x in panes) {
-      panes[x].style.display = 'none'
-      var e = document.getElementById('tab-' + x)
-      if (e) {
-        e.classList.remove('selected')
-      }
-    }
-    panes[choice].style.display = 'block'
-    var n = 'tab-' + choice
-    e = document.getElementById(n)
-    if (e) {
-      e.classList.add('selected')
-    }
-    if (choice === 'compose') {
+    document.getElementById('compose').addEventListener("selected", function (e) {
       dom.to.focus()
       updatecompose()
-    } else if (choice === 'list') {
+    })
+    document.getElementById('list').addEventListener("selected", function (e) {
       populateList()
       clearcompose()
-    }
+    })
+
+    changeUser('Alice')
+    panes.select('list')
+    updateDescription()
   }
 
   function clearcompose () {
@@ -84,7 +62,7 @@ function userInterface () {
       dom.reply.onclick = function () { replyToMsg(msg) }
     }
 
-    pane('msgView')
+    panes.select('msgView')
   }
 
   function replyToMsg (msg) {
@@ -95,7 +73,7 @@ function userInterface () {
     dom.to.value = msg.from
     dom.subject.value = 'Re: ' + msg.subject
     dom.body.value = indent(msg.body)
-    pane('compose')
+    panes.select('compose')
     dom.encrypted.checked = dom.encrypted.checked || msg.encrypted
   }
 
@@ -117,7 +95,7 @@ function userInterface () {
   function sendmail () {
     if (addmail(dom.to.value, dom.subject.value, dom.body.value, dom.encrypted.checked)) {
       clearcompose()
-      pane('list')
+      panes.select('list')
       return false
     } else {
       return false
@@ -258,7 +236,7 @@ function userInterface () {
     dom.from.innerText = user.name
     setupprefs()
     dom.showmore.checked = false
-    pane('list')
+    panes.select('list')
     updateDescription()
   }
 
